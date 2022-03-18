@@ -10,7 +10,7 @@ import numpy as np
 import torch
 from Cython.Build import cythonize
 from setuptools import Extension, find_packages, setup
-from torch.utils.cpp_extension import BuildExtension, CUDAExtension
+from torch.utils.cpp_extension import BuildExtension, CUDAExtension, CppExtension
 
 MAJOR = 0
 MINOR = 5
@@ -105,6 +105,16 @@ def make_cython_ext(name, module, sources):
     return extension
 
 
+def make_cpp_ext(name, module, sources):
+
+    return CppExtension(
+        name='{}.{}'.format(module, name),
+        sources=[os.path.join(*module.split('.'), p) for p in sources],
+        extra_compile_args={
+            'cxx': [],
+        })
+
+
 def make_cuda_ext(name, module, sources):
 
     return CUDAExtension(
@@ -131,13 +141,13 @@ def get_ext_modules():
             make_cython_ext(
                 name='soft_nms_cpu',
                 module='detector.nms',
-                sources=['src/soft_nms_cpu.pyx'])]
-        if torch.cuda.is_available():
-            ext_modules += [
-            make_cuda_ext(
+                sources=['src/soft_nms_cpu.pyx']),
+            make_cpp_ext(
                 name='nms_cpu',
                 module='detector.nms',
-                sources=['src/nms_cpu.cpp']),
+                sources=['src/nms_cpu.cpp'])]
+        if torch.cuda.is_available():
+            ext_modules += [
             make_cuda_ext(
                 name='nms_cuda',
                 module='detector.nms',
