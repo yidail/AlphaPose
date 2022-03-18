@@ -131,7 +131,9 @@ def get_ext_modules():
             make_cython_ext(
                 name='soft_nms_cpu',
                 module='detector.nms',
-                sources=['src/soft_nms_cpu.pyx']),
+                sources=['src/soft_nms_cpu.pyx'])]
+        if torch.cuda.is_available():
+            ext_modules += [
             make_cuda_ext(
                 name='nms_cpu',
                 module='detector.nms',
@@ -212,7 +214,7 @@ if __name__ == '__main__':
         setup_requires=['pytest-runner', 'numpy', 'cython', 'torch', 'wheel'],
         tests_require=['pytest'],
         install_requires=get_install_requires(),
-        ext_modules=get_ext_modules() if torch.cuda.is_available() else None, 
+        ext_modules=get_ext_modules(), 
         cmdclass={'build_ext': BuildExtension},
         zip_safe=False)
     # Windows need pycocotools here: https://github.com/philferriere/cocoapi#subdirectory=PythonAPI
