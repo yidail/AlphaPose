@@ -1,9 +1,13 @@
+from setuptools import dist
+dist.Distribution().fetch_build_eggs(['Cython>=0.15.1', 'numpy>=1.10', 'torch>=1.1'])
+
 import os
 import platform
 import subprocess
 import time
 
 import numpy as np
+import torch
 from Cython.Build import cythonize
 from setuptools import Extension, find_packages, setup
 from torch.utils.cpp_extension import BuildExtension, CUDAExtension
@@ -160,12 +164,12 @@ def get_ext_modules():
 
 def get_install_requires():
     install_requires = [
-        'six', 'terminaltables', 'scipy==1.1.0',
+        'six', 'terminaltables', 'scipy>=1.1.0',
         'opencv-python', 'matplotlib', 'visdom',
         'tqdm', 'tensorboardx', 'easydict',
         'pyyaml', 'halpecocotools',
         'torch>=1.1.0', 'torchvision>=0.3.0',
-        'munkres', 'timm==0.1.20', 'natsort'
+        'munkres', 'timm>=0.1.20', 'natsort'
     ]
     # official pycocotools doesn't support Windows, we will install it by third-party git repository later
     if platform.system() != 'Windows':
@@ -205,10 +209,10 @@ if __name__ == '__main__':
         ],
         license='GPLv3',
         python_requires=">=3",
-        setup_requires=['pytest-runner', 'numpy', 'cython'],
+        setup_requires=['pytest-runner', 'numpy', 'cython', 'torch', 'wheel'],
         tests_require=['pytest'],
         install_requires=get_install_requires(),
-        ext_modules=get_ext_modules(),
+        ext_modules=get_ext_modules() if torch.cuda.is_available() else None, 
         cmdclass={'build_ext': BuildExtension},
         zip_safe=False)
     # Windows need pycocotools here: https://github.com/philferriere/cocoapi#subdirectory=PythonAPI

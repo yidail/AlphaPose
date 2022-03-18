@@ -97,7 +97,9 @@ args.posebatch = args.posebatch * len(args.gpus)
 args.tracking = args.pose_track or args.pose_flow or args.detector=='tracker'
 
 if not args.sp:
-    torch.multiprocessing.set_start_method('forkserver', force=True)
+    # for wsl bug
+    # torch.multiprocessing.set_start_method('forkserver', force=True)
+    torch.multiprocessing.set_start_method('fork', force=True)
     torch.multiprocessing.set_sharing_strategy('file_system')
 
 
