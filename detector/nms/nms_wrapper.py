@@ -1,9 +1,10 @@
 import numpy as np
 import torch
 
+from . import nms_cpu
+from .soft_nms_cpu import soft_nms_cpu
 if torch.cuda.is_available():
-    from . import nms_cpu, nms_cuda
-    from .soft_nms_cpu import soft_nms_cpu
+    from . import nms_cuda
 
 
 def nms(dets, iou_thr, device_id=None):
