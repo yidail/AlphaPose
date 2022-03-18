@@ -4,7 +4,7 @@ from torch.autograd.function import once_differentiable
 from torch.nn.modules.utils import _pair
 
 import torch
-if torch.cuda.isavailable():
+if torch.cuda.is_available():
     from . import roi_align_cuda
 
 
