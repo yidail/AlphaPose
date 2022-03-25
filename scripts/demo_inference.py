@@ -98,8 +98,8 @@ args.tracking = args.pose_track or args.pose_flow or args.detector=='tracker'
 
 if not args.sp:
     # for wsl bug
-    # torch.multiprocessing.set_start_method('forkserver', force=True)
-    torch.multiprocessing.set_start_method('spawn', force=True)
+    torch.multiprocessing.set_start_method('forkserver', force=True)
+    # torch.multiprocessing.set_start_method('spawn', force=True)
     torch.multiprocessing.set_sharing_strategy('file_system')
 
 
