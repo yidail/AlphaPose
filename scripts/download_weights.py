@@ -12,7 +12,7 @@ def download_weights(drive_id, output_name, path):
     dest_path = ROOT_DIR + path
     pathlib.Path(dest_path).mkdir(parents=True, exist_ok=True)
     os.chdir(dest_path)
-    print(os.getcwd())
+
     if not pathlib.Path(dest_path + '/' + output_name).is_file():
         gdown.download(id=drive_id, output=output_name)
     else:
@@ -29,4 +29,4 @@ if __name__ == '__main__':
     
     download_weights(file_id_yolo, 'yolov3-spp.weights', path_yolo)
     download_weights(file_id_tracker, 'JDE-1088x608-uncertainty', path_tracker)
-    download_weights(file_id_tracker, 'fast_res50_256x192.pth', path_pretrained)
+    download_weights(file_id_fast_resnet, 'fast_res50_256x192.pth', path_pretrained)
